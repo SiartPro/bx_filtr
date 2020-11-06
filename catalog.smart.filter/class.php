@@ -94,17 +94,18 @@ class CSiartCatalogSmartFilter extends CBitrixCatalogSmartFilter
         $arSmartParts = explode("/", $url);
         foreach ($arSmartParts as $arSmartPart) {
             $item = false;
-            $arSmartPart = preg_split("/(-from-|-to-|-)/", $arSmartPart, 2, PREG_SPLIT_DELIM_CAPTURE);
+            $arSmartPart = preg_split("/(-from-|-to-|-)/", $arSmartPart, 3, PREG_SPLIT_DELIM_CAPTURE);
             foreach ($arSmartPart as $i => $smartElement) {
                 if ($i == 0) {
-                    if (preg_match("/^price_(.+)$/", $smartElement, $match)) {
-                        $itemId = $this->searchPrice($this->arResult["ITEMS"], $match[1]);
+                    if ($smartElement == 'price') {
+                        //$itemId = $this->searchPrice($this->arResult["ITEMS"], $match[1]);
+                        $itemId = array_key_first($this->arResult['PRICES']);
 
                     } else {
                         $itemId = $this->searchProperty($this->arResult["ITEMS"], $smartElement);
                     }
 
-                    if ($itemId > 0) {
+                    if (!empty($itemId)) {
                         $item = &$this->arResult["ITEMS"][$itemId];
 
                     } else {
@@ -228,7 +229,7 @@ class CSiartCatalogSmartFilter extends CBitrixCatalogSmartFilter
                 }
 
                 if ($arSmartPart) {
-                    array_unshift($arSmartPart, "price_" . $arItem["URL_ID"]);
+                    array_unshift($arSmartPart, "price");
 
                     $arSmartParts[] = $arSmartPart;
                 }
@@ -307,8 +308,12 @@ class CSiartCatalogSmartFilter extends CBitrixCatalogSmartFilter
             foreach ($arSmartPart as $key => $smartElement) {
                 if ($i == 0) {// первая итерация
                     // TODO - доработать с ценами календарями и диапазонами
-                    // если код указан в опциях как добавляемый
-                    if (!empty($this->arParams['PROPERTIES_USE_CODE']) && in_array($smartElement, $this->arParams['PROPERTIES_USE_CODE'])) {
+                    // если цена
+                    if ($smartElement == 'price') {
+                        $urlPart .= $smartElement;
+
+                    } elseif (!empty($this->arParams['PROPERTIES_USE_CODE']) && in_array($smartElement, $this->arParams['PROPERTIES_USE_CODE'])) {
+                        // если код указан в опциях как добавляемый
                         $urlPart .= $smartElement . '-';
                     }
                 } elseif ($key == 'from' || $key == 'to') {
@@ -448,7 +453,6 @@ class CSiartCatalogSmartFilter extends CBitrixCatalogSmartFilter
                     $strDescription = $arData['UF_DESCRIPTION'];
 
                 } catch (Exception $e) {
-                    echo $e->getMessage();
                 }
             }
 
