@@ -2,6 +2,7 @@
 /**
  * Created by PhpStorm.
  * @author Karikh Dmitriy <demoriz@gmail.com>
+ * @copyright Siart <mail@siart.pro>
  * @date 28.10.2020
  */
 
@@ -651,6 +652,8 @@ if ($section) {
 if ($arParams["SEF_MODE"] == "Y") {
     $arResult["JS_FILTER_PARAMS"]["SEF_SET_FILTER_URL"] = $this->makeSmartUrl($url, true);
     $arResult["JS_FILTER_PARAMS"]["SEF_DEL_FILTER_URL"] = $this->makeSmartUrl($url, false);
+    // рассчитать все URL
+    $this->calculateAllUrl($url);
 }
 
 $uri = new Uri($this->request->getRequestUri());
@@ -794,7 +797,6 @@ foreach (array_merge($_GET, $_POST) as $key => $value) {
 // добавление хлебных крошек, если разрешено в опциях и seo
 $this->addChainItems();
 $this->makeSeo();
-
 
 if (
     $arParams["XML_EXPORT"] === "Y"

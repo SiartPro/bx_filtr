@@ -2,6 +2,7 @@
 /**
  * Created by PhpStorm.
  * @author Karikh Dmitriy <demoriz@gmail.com>
+ * @copyright Siart <mail@siart.pro>
  * @date 28.10.2020
  */
 
@@ -52,6 +53,9 @@ class CSiartCatalogSmartFilter extends CBitrixCatalogSmartFilter
         if ($this->arParams['CP_BCSF_ADD_CHAIN_ITEMS'] !== 'Y') {
             $this->arParams['CP_BCSF_ADD_CHAIN_ITEMS'] = 'N';
         }
+        if ($this->arParams['CALCULATE_ALL_URL'] !== 'Y') {
+            $this->arParams['CALCULATE_ALL_URL'] = 'N';
+        }
 
         return parent::onPrepareComponentParams($arParams);
     }
@@ -81,7 +85,9 @@ class CSiartCatalogSmartFilter extends CBitrixCatalogSmartFilter
             'use_google' => 'false',
         );
 
-        return parent::executeComponent();
+        parent::executeComponent();
+
+        return $this->arResult;
     }
 
     /**
@@ -99,7 +105,8 @@ class CSiartCatalogSmartFilter extends CBitrixCatalogSmartFilter
                 if ($i == 0) {
                     if ($smartElement == 'price') {
                         //$itemId = $this->searchPrice($this->arResult["ITEMS"], $match[1]);
-                        $itemId = array_key_first($this->arResult['PRICES']);
+                        //$itemId = array_key_first($this->arResult['PRICES']);
+                        $itemId = array_keys($this->arResult['PRICES'])[0];
 
                     } else {
                         $itemId = $this->searchProperty($this->arResult["ITEMS"], $smartElement);
@@ -307,7 +314,7 @@ class CSiartCatalogSmartFilter extends CBitrixCatalogSmartFilter
             $i = 0;
             foreach ($arSmartPart as $key => $smartElement) {
                 if ($i == 0) {// первая итерация
-                    // TODO - доработать с ценами календарями и диапазонами
+                    // TODO - доработать с календарями и диапазонами
                     // если цена
                     if ($smartElement == 'price') {
                         $urlPart .= $smartElement;
@@ -377,12 +384,12 @@ class CSiartCatalogSmartFilter extends CBitrixCatalogSmartFilter
     {
         global $APPLICATION;
 
-        // добавим раздел в цепочку навигации
-        if (!empty($this->SECTION_NAME)) {
-            $APPLICATION->AddChainItem($this->SECTION_NAME, $this->SECTION_URL);
-        }
-
         if ($this->arParams['SEF_MODE'] == 'Y' && $this->arParams['CP_BCSF_ADD_CHAIN_ITEMS'] == 'Y') {
+            // добавим раздел в цепочку навигации
+            if (!empty($this->SECTION_NAME)) {
+                $APPLICATION->AddChainItem($this->SECTION_NAME, $this->SECTION_URL);
+            }
+
             foreach ($this->arResult["ITEMS"] as $id => $arItem) {
                 $strUrl = '';
                 $strUrlTemplate = str_replace('#SECTION_CODE#', $this->SECTION_CODE, $this->arParams['SEF_RULE']);
@@ -502,6 +509,19 @@ class CSiartCatalogSmartFilter extends CBitrixCatalogSmartFilter
                 $APPLICATION->SetPageProperty('title', $strTitle);
                 $APPLICATION->SetPageProperty('description', $strDescription);
             }
+        }
+    }
+
+    public function calculateAllUrl($url)
+    {
+        if ($this->arParams['CALCULATE_ALL_URL'] == 'Y') {
+            foreach ($this->arResult['ITEMS'] as &$arItem) {
+                foreach ($arItem['VALUES'] as &$arValue) {
+                    $arValue['URL'] = $this->makeSmartUrl($url, true, $arValue['CONTROL_ID']);
+                }
+                unset($arValue);
+            }
+            unset($arItem);
         }
     }
 

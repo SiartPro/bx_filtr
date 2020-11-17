@@ -24,5 +24,6 @@ $MESS["CP_BCSF_PROPERTIES_ALLOW_SEF"] = "List of properties for which a friendly
 $MESS["CP_BCSF_PROPERTIES_USE_CODE"] = "List of properties for which you need to use symbolic code in a friendly URL";
 $MESS["CP_BCSF_TRANSLATE_LIST_VALUE"] = "Transliterate the value of a property of type list";
 $MESS["CP_BCSF_ADD_CHAIN_ITEMS"] = "Add selected parameters to the navigation chain";
+$MESS["CP_BCSF_CALCULATE_ALL_URL"] = "Generate URL for each option separately";
 $MESS["CP_BCSF_HL_TABLE_NAME"] = "Highload table with meta tags for addresses";
 ?>
