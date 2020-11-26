@@ -51,14 +51,14 @@ class CSiartCatalogSmartFilter extends CBitrixCatalogSmartFilter
         $this->arParams['MAX_COUNT_ITEM_SEF'] = (int)$this->arParams['MAX_COUNT_ITEM_SEF'];
         if ($this->arParams['MAX_COUNT_ITEM_SEF'] == 0) $this->arParams['MAX_COUNT_ITEM_SEF'] = 3;
 
-        if ($this->arParams['CP_BCSF_ADD_CHAIN_ITEMS'] !== 'Y') {
-            $this->arParams['CP_BCSF_ADD_CHAIN_ITEMS'] = 'N';
+        if ($this->arParams['ADD_CHAIN_ITEMS'] !== 'Y') {
+            $this->arParams['ADD_CHAIN_ITEMS'] = 'N';
         }
         if ($this->arParams['CALCULATE_ALL_URL'] !== 'Y') {
             $this->arParams['CALCULATE_ALL_URL'] = 'N';
         }
         if ($this->arParams['ADD_META'] !== 'Y') {
-            $this->arParams['CALCULATE_ALL_URL'] = 'N';
+            $this->arParams['ADD_META'] = 'N';
         }
 
         return parent::onPrepareComponentParams($arParams);
@@ -388,7 +388,7 @@ class CSiartCatalogSmartFilter extends CBitrixCatalogSmartFilter
     {
         global $APPLICATION;
 
-        if ($this->arParams['SEF_MODE'] == 'Y' && $this->arParams['CP_BCSF_ADD_CHAIN_ITEMS'] == 'Y') {
+        if ($this->arParams['SEF_MODE'] == 'Y' && $this->arParams['ADD_CHAIN_ITEMS'] == 'Y') {
             // добавим раздел в цепочку навигации
             if (!empty($this->SECTION_NAME)) {
                 $APPLICATION->AddChainItem($this->SECTION_NAME, $this->SECTION_URL);
@@ -541,3 +541,5 @@ class CSiartCatalogSmartFilter extends CBitrixCatalogSmartFilter
             mb_strtolower(mb_substr($str, 1, mb_strlen($str, $encoding), $encoding));
     }
 }
+
+
