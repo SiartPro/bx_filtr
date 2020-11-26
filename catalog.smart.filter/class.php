@@ -9,6 +9,7 @@
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 
 use Bitrix\Main\Loader;
+use Bitrix\Iblock\Component\Tools;
 use Bitrix\Highloadblock\HighloadBlockTable;
 
 Loader::includeModule('iblock');
@@ -54,6 +55,9 @@ class CSiartCatalogSmartFilter extends CBitrixCatalogSmartFilter
             $this->arParams['CP_BCSF_ADD_CHAIN_ITEMS'] = 'N';
         }
         if ($this->arParams['CALCULATE_ALL_URL'] !== 'Y') {
+            $this->arParams['CALCULATE_ALL_URL'] = 'N';
+        }
+        if ($this->arParams['ADD_META'] !== 'Y') {
             $this->arParams['CALCULATE_ALL_URL'] = 'N';
         }
 
@@ -116,7 +120,7 @@ class CSiartCatalogSmartFilter extends CBitrixCatalogSmartFilter
                         $item = &$this->arResult["ITEMS"][$itemId];
 
                     } else {
-                        break;
+                        Tools::process404('', true, true, true);
                     }
 
                 }
@@ -418,7 +422,7 @@ class CSiartCatalogSmartFilter extends CBitrixCatalogSmartFilter
 
                             $strUrl = str_replace('#SMART_FILTER_PATH#', $strUrl, $strUrlTemplate);
                             $strUrl = preg_replace('/\/+/', '/', $strUrl);
-                            $APPLICATION->AddChainItem($this->upperFirst($arItem['NAME']), $strUrl);
+                            $APPLICATION->AddChainItem($this->upperFirst($arItem['NAME']) . ' ' . $arValue['VALUE'], $strUrl);
                         }
                     }
                 }
@@ -433,7 +437,7 @@ class CSiartCatalogSmartFilter extends CBitrixCatalogSmartFilter
     {
         global $APPLICATION;
 
-        if ($this->arParams['SEF_MODE'] == 'Y') {
+        if ($this->arParams['SEF_MODE'] == 'Y' && $this->arParams['ADD_META'] == 'Y') {
 
             $strH1 = '';
 

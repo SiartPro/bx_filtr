@@ -268,9 +268,9 @@ $arComponentParameters["PARAMETERS"]['ADD_CHAIN_ITEMS'] = array(
     'TYPE' => 'CHECKBOX',
     'DEFAULT' => 'N'
 );
-$arComponentParameters["PARAMETERS"]['CALCULATE_ALL_URL'] = array(
+$arComponentParameters["PARAMETERS"]['ADD_META'] = array(
     'PARENT' => 'OTHERS',
-    'NAME' => GetMessage('CP_BCSF_CALCULATE_ALL_URL'),
+    'NAME' => GetMessage('CP_BCSF_ADD_META'),
     'TYPE' => 'CHECKBOX',
     'DEFAULT' => 'N'
 );
