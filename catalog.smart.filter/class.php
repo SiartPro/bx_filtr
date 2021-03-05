@@ -48,17 +48,17 @@ class CSiartCatalogSmartFilter extends CBitrixCatalogSmartFilter
             }, $arParams['PROPERTIES_USE_CODE']);
         }
 
-        $this->arParams['MAX_COUNT_ITEM_SEF'] = (int)$this->arParams['MAX_COUNT_ITEM_SEF'];
-        if ($this->arParams['MAX_COUNT_ITEM_SEF'] == 0) $this->arParams['MAX_COUNT_ITEM_SEF'] = 3;
+        $arParams['MAX_COUNT_ITEM_SEF'] = (int)$arParams['MAX_COUNT_ITEM_SEF'];
+        if ($arParams['MAX_COUNT_ITEM_SEF'] == 0) $arParams['MAX_COUNT_ITEM_SEF'] = 3;
 
-        if ($this->arParams['ADD_CHAIN_ITEMS'] !== 'Y') {
-            $this->arParams['ADD_CHAIN_ITEMS'] = 'N';
+        if ($arParams['ADD_CHAIN_ITEMS'] !== 'Y') {
+            $arParams['ADD_CHAIN_ITEMS'] = 'N';
         }
-        if ($this->arParams['CALCULATE_ALL_URL'] !== 'Y') {
-            $this->arParams['CALCULATE_ALL_URL'] = 'N';
+        if ($arParams['CALCULATE_ALL_URL'] !== 'Y') {
+            $arParams['CALCULATE_ALL_URL'] = 'N';
         }
-        if ($this->arParams['ADD_META'] !== 'Y') {
-            $this->arParams['ADD_META'] = 'N';
+        if ($arParams['ADD_META'] !== 'Y') {
+            $arParams['ADD_META'] = 'N';
         }
 
         return parent::onPrepareComponentParams($arParams);
