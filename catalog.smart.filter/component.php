@@ -720,6 +720,7 @@ if ($arResult["JS_FILTER_PARAMS"]["SEF_SET_FILTER_URL"]) {
         "skip_empty" => true,
         "encode" => true,
     )));
+    $arResult["JS_FILTER_PARAMS"]["SEF_DEL_FILTER_URL"] = $APPLICATION->GetCurPage(false);
 }
 
 if (isset($_REQUEST["ajax"]) && $_REQUEST["ajax"] === "y") {

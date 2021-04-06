@@ -102,52 +102,57 @@ class CSiartCatalogSmartFilter extends CBitrixCatalogSmartFilter
     {
         $arResult = array();
         $arSmartParts = explode("/", $url);
-        foreach ($arSmartParts as $arSmartPart) {
-            $item = false;
-            $arSmartPart = preg_split("/(-from-|-to-|-)/", $arSmartPart, 3, PREG_SPLIT_DELIM_CAPTURE);
-            foreach ($arSmartPart as $i => $smartElement) {
-                if ($i == 0) {
-                    if ($smartElement == 'price') {
-                        //$itemId = $this->searchPrice($this->arResult["ITEMS"], $match[1]);
-                        //$itemId = array_key_first($this->arResult['PRICES']);
-                        $itemId = array_keys($this->arResult['PRICES'])[0];
-
-                    } else {
-                        $itemId = $this->searchProperty($this->arResult["ITEMS"], $smartElement);
-                    }
-
-                    if (!empty($itemId)) {
-                        $item = &$this->arResult["ITEMS"][$itemId];
-
-                    } else {
-                        Tools::process404('', true, true, true);
-                    }
-
-                }
-
-                if ($i != 0 || count($arSmartPart) == 1) {
-                    if ($smartElement === "-from-") {
-                        $arResult[$item["VALUES"]["MIN"]["CONTROL_NAME"]] = $arSmartPart[$i + 1];
-
-                    } elseif ($smartElement === "-to-") {
-                        $arResult[$item["VALUES"]["MAX"]["CONTROL_NAME"]] = $arSmartPart[$i + 1];
-
-                    } elseif ($smartElement === "-") {
-                        $valueId = $this->searchValue($item["VALUES"], $arSmartPart[$i + 1]);
-                        if (!empty($valueId)) {
-                            $arResult[$item["VALUES"][$valueId]["CONTROL_NAME"]] = $item["VALUES"][$valueId]["HTML_VALUE"];
+        if(count($arSmartParts) > $this->arParams['MAX_COUNT_ITEM_SEF']){
+            Tools::process404('', true, true, true);
+        } else {
+            foreach ($arSmartParts as $arSmartPart) {
+                $item = false;
+                $arSmartPart = preg_split("/(-from-|-to-|-)/", $arSmartPart, 3, PREG_SPLIT_DELIM_CAPTURE);
+                foreach ($arSmartPart as $i => $smartElement) {
+                    if ($i == 0) {
+                        if ($smartElement == 'price') {
+                            //$itemId = $this->searchPrice($this->arResult["ITEMS"], $match[1]);
+                            //$itemId = array_key_first($this->arResult['PRICES']);
+                            $itemId = array_keys($this->arResult['PRICES'])[0];
+    
+                        } else {
+                            $itemId = $this->searchProperty($this->arResult["ITEMS"], $smartElement);
                         }
-
-                    } else {
-                        $valueId = $this->searchValue($item["VALUES"], $smartElement);
-                        if (!empty($valueId)) {
-                            $arResult[$item["VALUES"][$valueId]["CONTROL_NAME"]] = $item["VALUES"][$valueId]["HTML_VALUE"];
+    
+                        if (!empty($itemId)) {
+                            $item = &$this->arResult["ITEMS"][$itemId];
+    
+                        } else {
+                            Tools::process404('', true, true, true);
+                        }
+    
+                    }
+    
+                    if ($i != 0 || count($arSmartPart) == 1) {
+                        if ($smartElement === "-from-") {
+                            $arResult[$item["VALUES"]["MIN"]["CONTROL_NAME"]] = $arSmartPart[$i + 1];
+    
+                        } elseif ($smartElement === "-to-") {
+                            $arResult[$item["VALUES"]["MAX"]["CONTROL_NAME"]] = $arSmartPart[$i + 1];
+    
+                        } elseif ($smartElement === "-") {
+                            $valueId = $this->searchValue($item["VALUES"], $arSmartPart[$i + 1]);
+                            if (!empty($valueId)) {
+                                $arResult[$item["VALUES"][$valueId]["CONTROL_NAME"]] = $item["VALUES"][$valueId]["HTML_VALUE"];
+                            }
+    
+                        } else {
+                            $valueId = $this->searchValue($item["VALUES"], $smartElement);
+                            if (!empty($valueId)) {
+                                $arResult[$item["VALUES"][$valueId]["CONTROL_NAME"]] = $item["VALUES"][$valueId]["HTML_VALUE"];
+                            }
                         }
                     }
                 }
+                unset($item);
             }
-            unset($item);
         }
+        
         return $arResult;
     }
 
