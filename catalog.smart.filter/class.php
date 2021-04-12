@@ -372,6 +372,9 @@ class CSiartCatalogSmartFilter extends CBitrixCatalogSmartFilter
                     }
                 }
 
+                if($arItemFields['VALUES']['MIN']['HTML_VALUE'] || $arItemFields['VALUES']['MAX']['HTML_VALUE'])
+                    $intAllCountChecked++;
+
                 // количество выбранных параметров свойства более одного
                 if ($intDoubleCountChecked > 1) {
                     $strSefMode = 'N';
